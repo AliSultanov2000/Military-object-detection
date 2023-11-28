@@ -25,7 +25,13 @@ def load_config_data(data_path: str) -> dict:
 CONFIG_DATA = load_config_data('config.yaml')
 print(CONFIG_DATA)
 
-
+results = model.train(
+   data=CONFIG_DATA['data'],  # Path to the YAML file
+   imgsz=CONFIG_DATA['imgsz'],  # Image resize
+   epochs=CONFIG_DATA['epochs'],  # The number of epochs
+   batch=CONFIG_DATA['batch'],  # The number of batch during train
+   name=CONFIG_DATA['name']  # The name of trained model
+   )
 
 try:
     model = YOLO(CONFIG_DATA['yolov8_model'])
