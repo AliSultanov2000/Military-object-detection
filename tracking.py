@@ -138,3 +138,60 @@ best_catboost_classifier.fit(X_train, y_train)
 
 # Check in test sample
 best_catboost_classifier.score(X_test, y_test)
+
+def objective(trial: optuna.Trial):
+    # list of hyperparameters for optimization (CatBoostClassifier)
+    param_distribution = {
+        "colsample_bylevel": trial.suggest_float("colsample_bylevel", 0.01, 0.1),
+        "depth": trial.suggest_int("depth", 1, 12),
+        "boosting_type": trial.suggest_categorical("boosting_type", ["Ordered", "Plain"]),
+        "bootstrap_type": trial.suggest_categorical("bootstrap_type", ["Bayesian", "Bernoulli", "MVS"]),
+                         }
+
+    # Smart idea! 
+    if param_distribution["bootstrap_type"] == "Bayesian":
+        param_distribution["bagging_temperature"] = trial.suggest_float("bagging_temperature", 0, 10)
+    elif param_distribution["bootstrap_type"] == "Bernoulli":
+        param_distribution["subsample"] = trial.suggest_float("subsample", 0.1, 1)
+
+    # The model (Here we can use Pipeline, custom classes, def function)
+    model = CatBoostClassifier(**param_distribution, loss_function='MultiClass', verbose=False)
+
+    # Cross validation
+    kf = KFold(n_splits=5, shuffle=True, random_state=50)  # Set fold strategy
+    cv_scores = cross_val_score(model, X_train, y_train, cv=kf, scoring='f1_macro')  # Metric results for all folds
+    score = np.mean(cv_scores)  # Mean for all folds 
+    std = np.std(cv_scores)  # Std by all folds
+
+    # User attribute
+    trial.set_user_attr("score", score)
+    trial.set_user_attr("std", std)
+
+    # Return the metric 
+    return score
+
+
+# Sampler: TPE
+sampler = optuna.samplers.TPESampler(seed=42)
+# DB Storage
+storage_url = "sqlite:///example.db"
+# study_name
+study_name = "catt_optimization"
+# Pruner using 
+pruner = SuccessiveHalvingPruner(min_resource=1, reduction_factor=2, min_early_stopping_rate=0)
+#Create a study 
+study = optuna.create_study(sampler=sampler,
+                            direction='maximize',
+                            storage=storage_url,
+                            load_if_exists=True,
+                            study_name=study_name,
+                            pruner=pruner)
+
+
+# START! 
+study.optimize(objective,   # What we have to optimize
+               n_trials=20,  # The number of trials 
+               timeout=5000)  # The time of optimizing 
+
+# Garbage collector 
+gc.collect()
