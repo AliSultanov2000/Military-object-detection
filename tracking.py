@@ -128,3 +128,13 @@ opt_search = optuna.integration.OptunaSearchCV(clf,
 
 # Let's get started 
 opt_search.fit(X_train, y_train)
+
+
+# Let's look at best estimator
+best_catboost_classifier = opt_search.best_estimator_
+
+# Refit
+best_catboost_classifier.fit(X_train, y_train)
+
+# Check in test sample
+best_catboost_classifier.score(X_test, y_test)
