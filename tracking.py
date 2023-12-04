@@ -42,8 +42,7 @@ class YoloModel:
         """Запуск на тестирование модели"""
     
 
-
-#ToDo сделать метод box_plott 
+ 
 class YoloTracker(YoloModel):
     """Класс YOLOv8 для задачи трекинга объектов"""
 
