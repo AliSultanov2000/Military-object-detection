@@ -7,10 +7,6 @@ from ultralytics.utils.plotting import Annotator, colors
 from ultralytics import YOLO
 import cv2
 
-# Важная ссылка
-# https://docs.ultralytics.com/guides/security-alarm-system/#email-send-function
-
-
 
 class YoloModel:
     """Базовый класс для работы с YOLOv8"""
