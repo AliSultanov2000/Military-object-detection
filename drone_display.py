@@ -3,8 +3,6 @@ import cvzone
 import numpy as np
 from time import time
 
-# Важная ссылка
-#  YOUTUBE: Live tracking on real FPV drone video | Autonomous Drone Object Tracking OpenCV Python   - отображение указателя 
 
 
 class Display:
