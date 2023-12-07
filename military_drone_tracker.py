@@ -1,17 +1,10 @@
 import yaml
-import torch
+from torch.cuda import is_available
 from time import time   
-import numpy as np
 
 from military_drone_display import Display
-from PIL import Image
-from ultralytics.utils.plotting import Annotator, colors
 from ultralytics import YOLO
 import cv2
-
-
-# Важная ссылка
-#  YOUTUBE: Live tracking on real FPV drone video | Autonomous Drone Object Tracking OpenCV Python   - отображение указателя 
 
 
 class YoloModel:
@@ -19,13 +12,13 @@ class YoloModel:
 
     def __init__(self, model_path):
 
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.device = 'cuda' if is_available() else 'cpu'
         self.model_path = model_path
         self.model = self.load_model()
         self.CLASS_NAMES_DICT = self.model.names
         self.start_time = 0
         self.end_time = 0
-
+    
     
     def load_model(self):
         """Загрузка модели YOLOv8"""
@@ -34,9 +27,24 @@ class YoloModel:
         model = model.to(device='cpu')
         model.fuse()
         return model
-    
 
-    def box_plotting(self, results):
+
+    def train_model(self, data, imgsz, epochs, batch, name):
+        """Тренировка модели YOLOv8 для задачи трекинга"""
+        self.model.train(
+        data=data,  # Путь до YAML файла
+        name=name,  # Название модели, которая сохранится 
+        imgsz=imgsz,  
+        epochs=epochs,  
+        batch=batch)
+
+
+    def test_model(self):
+        """Запуск на тестирование модели YOLOv8"""
+        # self.model.val()
+
+
+    def _box_plotting(self, results):
         """Отображение на экране box-а c распознанными объектами"""
 
         # Получение всех боксов
@@ -50,17 +58,7 @@ class YoloModel:
             # Отрисовка центров для Bounding Boxes
             cv2.drawMarker(annotated_frame, (x, y), (0, 0, 255), cv2.MARKER_CROSS, 15, 2)
 
-        return annotated_frame
-
-
-    def save_model(self):
-        """Сохранение модели YOLOv8"""
-        pass
-
-
-    def test_model(self):
-        """Запуск на тестирование модели"""
-        pass
+        return annotated_frame 
 
 
 
@@ -77,7 +75,7 @@ class YoloTracker(YoloModel, Display):
         # Список с результатами
         results = self.model.track(image_path, persist=True)
         # Отображение на экран
-        annotated_frame = self.box_plotting(results)
+        annotated_frame = self._box_plotting(results)
         cv2.imshow("YOLOv8 Tracking", annotated_frame)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
@@ -87,10 +85,7 @@ class YoloTracker(YoloModel, Display):
         """Предсказание модели на видеопотоке"""
 
         # Открытие видео файла 
-        cap = cv2.VideoCapture(video_path)
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-        
+        cap = cv2.VideoCapture(video_path)        
         frame_count = 0
         assert cap.isOpened()
 
@@ -104,13 +99,13 @@ class YoloTracker(YoloModel, Display):
                 # Запуск YOLOv8 трекера
                 results = self.model.track(frame, persist=True)
                 # Отображение на экране box-ов
-                annotated_frame = self.box_plotting(results) 
+                annotated_frame = self._box_plotting(results) 
 
                 # Вывод fps, времени работы, эмблемы на дисплей
                 self.fps_display(annotated_frame)
                 self.starting_time_display(annotated_frame)
                 self.logotype_display(annotated_frame)
-                self.target_aiming_display(annotated_frame, 640, 360)
+                self.target_aiming_display(annotated_frame, 640, 360)  # x_center, y_center 
 
                 # Вывод кадра на экран
                 cv2.imshow("YOLOv8 Tracking", annotated_frame)
@@ -138,6 +133,3 @@ if __name__ == '__main__':
 
     # Запуск на трекиг видеопотока
     tracker.stream_tracking(r"C:\Users\1NR_Operator_33\Downloads\танк Т90м Прорыв лучший танк в мире в бою.mp4")
-    # tracker.image_tracking(r'D:\tank_detection\valid\images\sideup-30-_jpg.rf.99262d69f67dd081581b23af2d553ca2.jpg')
-
-
