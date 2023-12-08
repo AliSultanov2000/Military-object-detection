@@ -27,15 +27,6 @@ class YoloModel:
         return model
 
 
-    def train_model(self, data, imgsz, epochs, batch, name):
-        self.model.train(
-        data=data,  # Путь до YAML файла
-        name=name,  # Название модели, которая сохранится 
-        imgsz=imgsz,  
-        epochs=epochs,  
-        batch=batch)
-
-
     def test_model(self):
         # self.model.val()
 
