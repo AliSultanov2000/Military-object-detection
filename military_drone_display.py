@@ -5,8 +5,6 @@ from time import time
 
 
 class Display:
-    """Класс для отображения дополнительной информации о работе трекера на экран"""
-
     def fps_display(self, im0) -> None:
         self.end_time = time()
         fps = 1 / np.round(self.end_time - self.start_time, 2)
@@ -35,7 +33,6 @@ class Display:
     
 
     def logotype_display(self, im0) -> None:
-        """Отображение логотипа. Логотип должен быть только в PNG"""
         
         img_front = cv2.imread(r"D:\russian_flag.PNG", cv2.IMREAD_UNCHANGED)
         img_front = cv2.resize(img_front, (64, 48))
