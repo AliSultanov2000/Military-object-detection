@@ -8,7 +8,6 @@ import cv2
 
 
 class YoloModel:
-    """Базовый класс для работы с YOLOv8"""
 
     def __init__(self, model_path):
 
@@ -21,7 +20,6 @@ class YoloModel:
     
     
     def load_model(self):
-        """Загрузка модели YOLOv8"""
 
         model = YOLO(self.model_path)
         model = model.to(device='cpu')
@@ -30,7 +28,6 @@ class YoloModel:
 
 
     def train_model(self, data, imgsz, epochs, batch, name):
-        """Тренировка модели YOLOv8 для задачи трекинга"""
         self.model.train(
         data=data,  # Путь до YAML файла
         name=name,  # Название модели, которая сохранится 
@@ -40,12 +37,10 @@ class YoloModel:
 
 
     def test_model(self):
-        """Запуск на тестирование модели YOLOv8"""
         # self.model.val()
 
 
     def _box_plotting(self, results):
-        """Отображение на экране box-а c распознанными объектами"""
 
         # Получение всех боксов
         boxes = results[0].boxes.xywh.cpu()
@@ -63,14 +58,12 @@ class YoloModel:
 
 
 class YoloTracker(YoloModel, Display):
-    """Класс YOLOv8 для задачи трекинга объектов"""
 
     def __init__(self, model_path):
         super().__init__(model_path)
 
 
     def image_tracking(self, image_path: str) -> None: 
-        """Предсказание модели на изображении"""
         
         # Список с результатами
         results = self.model.track(image_path, persist=True)
@@ -82,7 +75,6 @@ class YoloTracker(YoloModel, Display):
  
         
     def stream_tracking(self, video_path: str) -> None: 
-        """Предсказание модели на видеопотоке"""
 
         # Открытие видео файла 
         cap = cv2.VideoCapture(video_path)        
