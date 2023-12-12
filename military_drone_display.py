@@ -9,15 +9,7 @@ from time import time
 
 class Display:
     """Класс для отображения дополнительной информации о работе трекера на экран"""
-
-    def fps_display(self, im0) -> None:
-        """Отображение на экран FPS"""
-        self.end_time = time()
-        fps = 1 / np.round(self.end_time - self.start_time, 2)
-        text = f'FPS: {int(fps)}'
-        cv2.putText(im0, text, (1140, 40), cv2.FONT_HERSHEY_COMPLEX, 1.0, (0, 255, 0), 2)
     
-
     def starting_time_display(self, im0) -> None: 
         """Отображение на экран времени работы"""
         cv2.putText(im0, 'Время', (1140, 80), cv2.FONT_HERSHEY_COMPLEX, 1.0, (0, 255, 0), 2)
