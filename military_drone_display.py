@@ -14,7 +14,7 @@ class Display:
 
 
     def working_time_display(self, im0) -> None: 
-        """Отображение на экран времени работы"""
+        """Отображение на экран времени работы трекера -  00:00:00"""
         self.CURRENT_TIME = time()
         working_time = str(datetime.timedelta(seconds=round(self.CURRENT_TIME - self.START_TIME)))
         cv2.putText(im0, f'Время работы: {working_time}', (950, 25), cv2.FONT_HERSHEY_COMPLEX, 0.8, (0, 255, 0), 1)
