@@ -14,7 +14,6 @@ class YoloModel:
         self.device = 'cuda' if is_available() else 'cpu'
         self.model_path = model_path
         self.model = self.load_model()
-        self.CLASS_NAMES_DICT = self.model.names
 
         
     def load_model(self):
@@ -30,8 +29,8 @@ class YoloModel:
         """Тренировка модели YOLOv8 для задачи трекинга"""
 
         self.model.train(
-        data=data,  # Путь до YAML файла
-        name=name,  # Название модели, которая сохранится 
+        data=data,  
+        name=name,  
         imgsz=imgsz,  
         epochs=epochs,  
         batch=batch)
