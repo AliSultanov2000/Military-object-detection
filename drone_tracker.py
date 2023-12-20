@@ -36,11 +36,6 @@ class YoloModel:
         batch=batch)
     
 
-    def test_model(self):
-        """Запуск на тестирование модели YOLOv8"""
-        # self.model.val()
-
-
     def _box_plotting(self, results):
         """Отображение на экране box-а c распознанными объектами"""
     
