@@ -39,12 +39,7 @@ class Display:
         cv2.line(im0, (x_center + gap, y_center), (x_center + gap + line_length, y_center), (0, 255, 0), 2)  
         cv2.line(im0, (x_center, y_center + gap), (x_center, y_center + gap + line_length // 2),  (0, 255, 0), 2)
 
-        # Отображение прямоугольника наведения
-        pointer_box_w = int(x_center // 3.2)  
-        pointer_box_h = int(y_center / 2.4)  
-        cvzone.cornerRect(im0, (x_center - pointer_box_w // 2, y_center - pointer_box_h // 2, pointer_box_w, pointer_box_h), rt=0)
     
-
     def logotype_display(self, im0) -> None:
         """Отображение логотипа. Логотип должен быть только в PNG"""
         
