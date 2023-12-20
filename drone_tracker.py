@@ -53,16 +53,6 @@ class YoloModel:
         return annotated_frame 
     
 
-# АКТУАЛЬНО:
-# Разобраться с colors
-# Добавить ф-л для изм-я р-ра окна
-# Заполнить save_model, test_model
-# Сделать код рефакторинг
-# Добавить loggers-ы (you look like)
-
-
-
-
 
 class YoloTracker(YoloModel):
     """Класс YOLOv8 для задачи трекинга объектов"""
