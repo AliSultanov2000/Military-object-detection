@@ -83,44 +83,7 @@ class YoloTracker(YoloModel):
         cv2.destroyAllWindows()
  
         
-    def stream_tracking(self, video_path: str, cls_display: Display) -> None: 
-        """Предсказание модели на видеопотоке"""
-
-        # Открытие видео файла 
-        cap = cv2.VideoCapture(video_path)
-        frame_count = 0
-        assert cap.isOpened()                          
-        
-        # Цикл по видео фрейму
-        while cap.isOpened():
-            cls_display.start_time = time()
-            # Считывание фрейма из видео
-            success, frame = cap.read()
-
-            if success:
-                # Запуск YOLOv8 трекера
-                results = self.model.track(frame, persist=True)
-                # Отображение на экране box-ов
-                annotated_frame = self._box_plotting(results) 
-
-                # Вывод времени работы, fps, эмблемы на дисплей
-                cls_display.working_time_display(annotated_frame)
-                cls_display.fps_display(annotated_frame)
-                cls_display.logotype_display(annotated_frame)
-                cls_display.project_name_display(annotated_frame, 640, 360)
-                cls_display.target_aiming_display(annotated_frame, 640, 360)  # Координаты x_center, y_center
-
-        
-
-                # Вывод кадра на экран
-                cv2.imshow('YOLOv8 tracker', annotated_frame)
-                frame_count += 1
-                # Остановка цикла при нажатии "q"
-                if cv2.waitKey(1) & 0xFF == ord("q"):
-                    break
-            else:
-                # Остановка цикла, если видео закончено
-                break
+    
         
         # Закрытие видеопотока
         cap.release()
