@@ -189,6 +189,5 @@ class SpeedEstimator:
             return
 
 
-if __name__ == "__main__":
-    SpeedEstimator()
+
 
