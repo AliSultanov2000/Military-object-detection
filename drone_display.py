@@ -61,3 +61,18 @@ class Display:
 
         text = 'Трекер ВТ'
         cv2.putText(im0, text, (x_center - 50, 25), cv2.FONT_HERSHEY_COMPLEX, 0.8, (0, 255, 0), 1, cv2.LINE_AA)
+
+
+class MyDataSet(Dataset):
+    def __init__(self, data_dir, transform=None): 
+        self.data = ImageFolder(data_dir, transform=transform)
+
+    def __len__(self):
+        return self.data
+
+    def __getitem__(self, idx): 
+        return self.data[idx]
+    
+    @property
+    def classes(self):
+        return self.data.classes
