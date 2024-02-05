@@ -94,3 +94,6 @@ class Net(nn.Module):
 
 # Создаём экземпляр класса
 net = Net()
+
+optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.9)  # Оптимизатор
+criterion = nn.NLLLoss()  # Функция потерь отрицательного логарифмического подобия
