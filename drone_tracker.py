@@ -388,6 +388,23 @@ dataloader = DataLoader(dataset, batch_size=4, shuffle=True, )
 for idx, batch in enumerate(dataloader):
     print(idx ,batch) 
 
+class Net(nn.Module):
+    def __init__(self):
+        super(Net, self).__init__()   # Создаём объект базового класса nn.Module
+        self.fc1 = nn.Linear(10, 15)  
+        self.fc2 = nn.Linear(15, 20)
+        self.fc3 = nn.Linear(20, 10)
+
+    def forward(self, x):
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        return F.log_softmax(x)
+    
+
+# Создаём экземпляр класса
+net = Net()
+
 if __name__ == "__main__":
     DistanceCalculation()
 
