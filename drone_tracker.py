@@ -382,6 +382,12 @@ class MyDataSet(Dataset):
         return self.data.classes
 
 
+
+dataloader = DataLoader(dataset, batch_size=4, shuffle=True, )
+
+for idx, batch in enumerate(dataloader):
+    print(idx ,batch) 
+
 if __name__ == "__main__":
     DistanceCalculation()
 
