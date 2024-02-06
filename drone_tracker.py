@@ -381,7 +381,7 @@ class MyDataSet(Dataset):
     def classes(self):
         return self.data.classes
 
-
+torch.save(net, 'torch_xaxa.pkl')  # Сохранили саму модель вместе с весами
 
 dataloader = DataLoader(dataset, batch_size=4, shuffle=True, )
 
