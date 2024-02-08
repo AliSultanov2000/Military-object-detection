@@ -1,67 +1,17 @@
-class SpeedEstimator:
-    """A class to estimation speed of objects in real-time video stream based on their tracks."""
+class Network(nn.Module): 
+   def __init__(self, input_size, output_size): 
+       super(Network, self).__init__() 
 
-    def __init__(self):
-        """Initializes the speed-estimator class with default values for Visual, Image, track and speed parameters."""
+       self.seq = nn.Sequential(nn.Linear(input_size, 24),
+                                nn.ReLU(),
+                                nn.Linear(24, 26),
+                                nn.ReLU(),
+                                nn.Linear(26, output_size))
+        
 
-        # Visual & im0 information
-        self.im0 = None
-        self.annotator = None
-        self.view_img = False
 
-        # Region information
-        self.reg_pts = [(20, 400), (1260, 400)]
-        self.region_thickness = 3
 
-        # Predict/track information
-        self.clss = None
-        self.names = None
-        self.boxes = None
-        self.trk_ids = None
-        self.trk_pts = None
-        self.line_thickness = 2
-        self.trk_history = defaultdict(list)
 
-        # Speed estimator information
-        self.current_time = 0
-        self.dist_data = {}
-        self.trk_idslist = []
-        self.spdl_dist_thresh = 10
-        self.trk_previous_times = {}
-        self.trk_previous_points = {}
-
-        # Check if environment support imshow
-        self.env_check = check_imshow(warn=True)
-
-    def set_args(
-        self,
-        reg_pts,
-        names,
-        view_img=False,
-        line_thickness=2,
-        region_thickness=5,
-        spdl_dist_thresh=10,
-    ):
-        """
-        Configures the speed estimation and display parameters.
-
-        Args:
-            reg_pts (list): Initial list of points defining the speed calculation region.
-            names (dict): object detection classes names
-            view_img (bool): Flag indicating frame display
-            line_thickness (int): Line thickness for bounding boxes.
-            region_thickness (int): Speed estimation region thickness
-            spdl_dist_thresh (int): Euclidean distance threshold for speed line
-        """
-        if reg_pts is None:
-            print("Region points not provided, using default values")
-        else:
-            self.reg_pts = reg_pts
-        self.names = names
-        self.view_img = view_img
-        self.line_thickness = line_thickness
-        self.region_thickness = region_thickness
-        self.spdl_dist_thresh = spdl_dist_thresh
 
     def extract_tracks(self, tracks):
         """
