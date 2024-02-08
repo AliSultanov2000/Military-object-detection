@@ -440,11 +440,8 @@ def model_train(num_epochs: int, train_loader: DataLoader, validate_loader: Data
                 running_loss, running_items, running_right = 0.0, 0.0, 0.0
                     
     print('Training is finished!')
-
-# Создаём экземпляр класса
-net = Net()
-
-if __name__ == "__main__":
-    DistanceCalculation()
+if __name__ == "__main__": 
+    num_epochs = 50
+    model_train(num_epochs, train_loader, validate_loader)
 
 
