@@ -390,7 +390,56 @@ class Net(nn.Module):
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return F.log_softmax(x)
+
+
+# ТЕСТИРОВАНИЕ ФУНКЦИИ
+
+def model_train(num_epochs: int, train_loader: DataLoader, validate_loader: DataLoader):
+    """Функция для обучения нейронной сети с валидацией. Метрика: Accuracy"""
     
+    for epoch in range(num_epochs):
+        running_loss, running_items, running_right = 0.0, 0.0, 0.0
+        for idx, train_batch in enumerate(train_loader):
+            inputs, labels = train_batch[0], train_batch[1].to(torch.long)
+    
+            # Обнуляем градиент
+            optimizer.zero_grad()
+    
+            outputs = model(inputs)              # Предсказание
+            loss = loss_fn(outputs, labels)      # Ошибка
+            loss.backward()                      # Градиенты
+            optimizer.step()                     # Шаг оптимизации
+    
+            # выводим статистику о процессе обучения
+            running_loss += loss.item()
+            running_items += len(labels)
+            running_right += (labels == torch.max(outputs, 1)[1]).sum()
+    
+            # выводим статистику о процессе обучения
+            if idx % 10 == 0:    # печатаем каждые 10 mini-batches
+                model.eval()
+                    
+                valid_running_loss, valid_running_items, valid_running_right  = 0.0, 0.0, 0.0
+                for idx, valid_batch in enumerate(validate_loader):
+                    valid_inputs, valid_labels = valid_batch[0], valid_batch[1].to(torch.long)
+
+                    valid_outputs = model(valid_inputs)              # Предсказание
+                    valid_loss = loss_fn(valid_outputs, valid_labels)  # Ошибка на одном батче
+                    valid_running_loss += valid_loss.item()            # Общая ошибка на всей эпохе
+
+                    valid_running_items += len(valid_batch[1])  
+                    valid_running_right += (valid_batch[1] == torch.max(valid_outputs, 1)[1]).sum()
+
+                print(f'Epoch [{epoch + 1} / {num_epochs}]. ' \
+                      f'Step [{idx + 1}/{len(train_loader)}]. ' \
+                      f'Train Loss {running_loss / running_items:.3f}. ' \
+                      f'Train Acc {running_right / running_items:.3f}. ' \
+                      f'Valid Loss {valid_running_loss / valid_running_items:.3f} ' \
+                      f'Valid Acc {valid_running_right / valid_running_items:.3f}')
+                
+                running_loss, running_items, running_right = 0.0, 0.0, 0.0
+                    
+    print('Training is finished!')
 
 # Создаём экземпляр класса
 net = Net()
