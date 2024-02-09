@@ -231,6 +231,8 @@ class DistanceCalculation:
 
 
 
-
+# Запуск на обучение
+num_epochs = 20
+train_losses, val_losses = model_train(num_epochs, train_loader, validate_loader) 
 
 
