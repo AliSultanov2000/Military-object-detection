@@ -11,6 +11,49 @@ class Network(nn.Module):
 # Отображение результата обучения
 x_epochs = np.arange(1, num_epochs + 1)
 
+
+def model_train(num_epochs: int, train_loader: DataLoader, validate_loader: DataLoader):
+    """Функция для обучения нейронной сети с валидацией. Метрика: Accuracy"""
+
+    train_losses, val_losses = [], []  # Ошибка на трейне, валидации
+
+    for epoch in range(num_epochs):
+        # Тренировка за эпоху
+        model.train()
+        running_loss = 0.0
+        for inputs, labels in tqdm(train_loader, desc='Training loop'):
+            labels = labels.to(torch.long)
+            # Обнуляем градиент
+            optimizer.zero_grad()
+    
+            outputs = model(inputs)              # Предсказание
+            loss = loss_fn(outputs, labels)      # Ошибка
+            loss.backward()                      # Градиенты
+            optimizer.step()                     # Шаг оптимизации
+        
+            running_loss += loss.item()       # Увеличиваем общую ошибку за эпоху
+        
+        # Считаем ошибку за эпоху
+        train_loss = running_loss / len(train_loader.dataset)
+        train_losses.append(train_loss)
+        
+        # Валидацию делаем только за одну эпоху
+        running_loss = 0.0
+        model.eval()  
+        for images, labels in tqdm(validate_loader, desc='Validation loop'):
+            labels = labels.to(torch.long)
+            outputs = model(images)
+            loss = loss_fn(outputs, labels)
+            running_loss += loss.item()
+
+        # Считаем ошибку за эпоху
+        val_loss = running_loss / len(validate_loader.dataset)
+        val_losses.append(val_loss)
+
+        # Печатаем данные на каждой эпохе, вовзращаем результаты обучения
+        print(f"Epoch {epoch + 1} / {num_epochs} - Train loss: {train_loss}, Validation loss: {val_loss}")
+    return train_losses, val_losses
+
 fig, ax = plt.subplots()
 ax.set(title='Процесс обучения нейросети', xlabel='Epoch', ylabel='Loss')
 ax.plot(x_epochs, train_losses, label='Train')
