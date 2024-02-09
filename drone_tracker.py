@@ -8,7 +8,14 @@ class Network(nn.Module):
                                 nn.ReLU(),
                                 nn.Linear(26, output_size))
         
+# Отображение результата обучения
+x_epochs = np.arange(1, num_epochs + 1)
 
+fig, ax = plt.subplots()
+ax.set(title='Процесс обучения нейросети', xlabel='Epoch', ylabel='Loss')
+ax.plot(x_epochs, train_losses, label='Train')
+ax.plot(x_epochs, val_losses, label='Validation')
+ax.legend();
 
 class DistanceCalculation:
     """A class to calculate distance between two objects in real-time video stream based on their tracks."""
