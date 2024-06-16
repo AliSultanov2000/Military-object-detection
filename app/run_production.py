@@ -12,12 +12,10 @@ def parse_opt():
 
     parser = argparse.ArgumentParser()
     # Загрузка модели
-    parser.add_argument('--model_type', type=str, default=r"RTDETR")
-    parser.add_argument('--model_weights', type=str, default=r"./weights_base/rtdetr-l.pt")
-    # Режим запуска: детекция или трекинг объектов
-    parser.add_argument('--mode', type=str, default='tracking')
+    parser.add_argument('--model_type', type=str, default=r"YOLO")
+    parser.add_argument('--model_weights', type=str, default=r"D:\runs\strelets_v5_yolov8s\weights\best.pt")
     # Входной видеопоток
-    parser.add_argument('--input_video_path', type=str, default=r"./input_videos/test_video1.mp4")
+    parser.add_argument('--input_video_path', type=str, default=r"")
     # Конфигурация сервера
     parser.add_argument('--debug', type=bool, default=True)
     parser.add_argument('--host', type=str, default=r"192.168.1.102")
@@ -30,8 +28,8 @@ def parse_opt():
 def main(opt):
     """Запуск сервера с развёрнутой нейронной сетью с загруженными весами"""
 
-    model = ModelDetectron(opt.model_type, opt.model_weights, opt.mode)
-    
+    model = ModelDetectron(opt.model_type, opt.model_weights)
+
     app = Flask(__name__)
 
     @app.route('/')
@@ -44,9 +42,9 @@ def main(opt):
         return Response(model(opt.input_video_path),
                         mimetype='multipart/x-mixed-replace; boundary=frame')
     
+    
     # Запуск сервера
     app.run(debug=opt.debug,
-            # host=opt.host,
             port=opt.port)
 
 
