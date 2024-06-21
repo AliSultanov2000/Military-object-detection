@@ -1,3 +1,3 @@
-# Project for detection/tracking objects using YOLOv8 model
+# Проект для решения задачи детекции объектов на охраняемом периметре. Реализовано на основе моделей YOLO, RTDETR от ultralytics 
 
 
