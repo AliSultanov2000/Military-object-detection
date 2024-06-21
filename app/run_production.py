@@ -13,7 +13,7 @@ def parse_opt():
     parser = argparse.ArgumentParser()
     # Загрузка модели
     parser.add_argument('--model_type', type=str, default=r"YOLO")
-    parser.add_argument('--model_weights', type=str, default=r"D:\runs\strelets_v5_yolov8s\weights\best.pt")
+    parser.add_argument('--model_weights', type=str, default=r"")
     # Входной видеопоток
     parser.add_argument('--input_video_path', type=str, default=r"")
     # Конфигурация сервера
