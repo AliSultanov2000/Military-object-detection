@@ -87,4 +87,5 @@ class Display(DisplayConfig):
             endAngle= self.ellipse_end_angle,
             color = self.ellipse_color,
             thickness=self.ellipse_thickness,
-            lineType=self.e
+            lineType=self.ellipse_linetype
+        )
